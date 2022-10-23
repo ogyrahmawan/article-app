@@ -1,0 +1,108 @@
+basePath: /api
+definitions:
+  swagger.BaseResponse:
+    properties:
+      code:
+        example: OK
+        type: string
+      data: {}
+      errors: {}
+      message:
+        example: operasi berhasil dieksekusi.
+        type: string
+      request_id:
+        example: 24fa3770-628c-49de-aa17-3a338f73d99b
+        type: string
+      timestamp:
+        example: "2022-04-27 23:19:56"
+        type: string
+    type: object
+  swagger.InternalServerErrorResponse:
+    properties:
+      code:
+        example: LBR-02-008
+        type: string
+      data: {}
+      errors: {}
+      message:
+        example: terjadi kesalahan, silakan hubungi administrator.
+        type: string
+      request_id:
+        example: 24fa3770-628c-49de-aa17-3a338f73d99b
+        type: string
+      timestamp:
+        example: "2022-04-27 23:19:56"
+        type: string
+    type: object
+  swagger.RequestTimeoutResponse:
+    properties:
+      code:
+        example: LBR-02-009
+        type: string
+      data: {}
+      errors: {}
+      message:
+        example: permintaan telah melampaui batas waktu, harap request kembali.
+        type: string
+      request_id:
+        example: 24fa3770-628c-49de-aa17-3a338f73d99b
+        type: string
+      timestamp:
+        example: "2022-04-27 23:19:56"
+        type: string
+    type: object
+info:
+  contact: {}
+  description: api "API Article App V1"
+  title: Article App
+  version: v1
+paths:
+  /v1/cms/user/login:
+    post:
+      parameters:
+      - description: lang
+        in: header
+        name: Accept-Language
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.BaseResponse'
+        "408":
+          description: Request Timeout
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.RequestTimeoutResponse'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  items:
+                    type: object
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/swagger.InternalServerErrorResponse'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  items:
+                    type: object
+                  type: array
+              type: object
+      summary: Generate JWT Token
+      tags:
+      - User Auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
